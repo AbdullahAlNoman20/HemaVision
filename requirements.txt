@@ -1,0 +1,7 @@
+# requirements.txt
+Flask==3.0.3
+Flask-WTF==1.2.1
+pdfplumber==0.11.4
+pandas==2.2.2
+python-dotenv==1.0.1
+gunicorn==22.0.0

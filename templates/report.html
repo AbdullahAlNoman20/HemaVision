@@ -1,0 +1,38 @@
+<!-- templates/report.html -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>HemaVision Report — {{ report_id }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="container print-area">
+    <h1>HemaVision Immunophenotyping Report</h1>
+    <p>Report ID: <strong>{{ report_id }}</strong></p>
+
+    <table>
+      <thead>
+        <tr><th>Tube</th><th>Marker</th><th>Sum Percent</th></tr>
+      </thead>
+      <tbody>
+        {% for row in tables %}
+        <tr>
+          <td>{{ row["Tube"] }}</td>
+          <td>{{ row["Marker"] }}</td>
+          <td>{{ "%.2f"|format(row["Sum Percent"]) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>Interpretation</h2>
+    <p>{{ interpretation }}</p>
+
+    <p class="disclaimer">This is an automated screening aid, not a final diagnostic decision. Clinical correlation required.</p>
+
+    <button onclick="window.print()" class="no-print">Print Report</button>
+    <a href="{{ url_for('index') }}" class="no-print">← New Upload</a>
+  </main>
+</body>
+</html>

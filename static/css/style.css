@@ -1,0 +1,92 @@
+FIND (append to end of static/css/style.css):
+@media print {
+  .no-print { display: none; }
+}
+
+REPLACE WITH:
+@media print {
+  .no-print { display: none; }
+  body { background: #fff; color: #000; }
+  .card { border-color: #ccc; background: #fff; }
+}
+
+.report-head { margin-bottom: 24px; }
+
+.meta-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid #2dd4bf33;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+.interpretation-text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 9px 10px;
+  text-align: left;
+  font-size: 13px;
+}
+
+th {
+  color: var(--text-dim);
+  font-weight: 500;
+  background: var(--surface-2);
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.action-row .submit-btn {
+  width: auto;
+  padding: 12px 24px;
+}
+
+.link-back {
+  color: var(--text-dim);
+  font-size: 13.5px;
+  text-decoration: none;
+}
+
+.link-back:hover {
+  color: var(--accent);
+}
