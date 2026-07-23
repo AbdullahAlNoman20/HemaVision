@@ -1,0 +1,77 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dr. Momena Begum — AI-Powered Hematology Care</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">Hv</span>
+      <span class="brand-name">HemaVision</span>
+    </div>
+    <nav class="nav-links">
+      <a href="{{ url_for('analyze') }}" class="nav-cta">Live Analyzer</a>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <span class="badge">Intelligent AI Doctor Platform</span>
+    <h1>Dr. Momena Begum's<br>AI-Powered Hematology Suite</h1>
+    <p class="subtitle">নির্ভুল, দ্রুত এবং সাশ্রয়ী ইমিউনোফেনোটাইপিং বিশ্লেষণ — একজন বিশেষজ্ঞ হেমাটোলজিস্টের তত্ত্বাবধানে তৈরি এআই সিস্টেম দিয়ে।</p>
+    <a href="{{ url_for('analyze') }}" class="hero-cta">
+      <span>HemaVision রিপোর্ট এনালাইজ করুন</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </section>
+
+  <section class="doctor-section">
+    <div class="doctor-card">
+      <img src="{{ url_for('static', filename=doctor.photo) }}" alt="{{ doctor.name }}" class="doctor-photo" onerror="this.style.display='none'">
+      <div class="doctor-info">
+        <span class="doctor-tag">Lead Clinical Expert</span>
+        <h2>{{ doctor.name }}</h2>
+        <p class="doctor-designation">{{ doctor.designation }}</p>
+        <p class="doctor-institute">{{ doctor.institute }} · {{ doctor.location }}</p>
+        <div class="expertise-list">
+          {% for item in doctor.expertise %}
+            <span class="expertise-chip">{{ item }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services-section">
+    <h2 class="section-title">Medical AI Services</h2>
+    <div class="services-grid">
+      <div class="service-card live">
+        <span class="live-dot"></span>
+        <span class="service-status live-status">LIVE NOW</span>
+        <h3>HemaVision — Immunophenotyping AI</h3>
+        <p>Flow cytometry রিপোর্ট থেকে স্বয়ংক্রিয় লিউকেমিয়া লিনিয়েজ ইন্টারপ্রিটেশন।</p>
+        <a href="{{ url_for('analyze') }}" class="service-link">Try Now →</a>
+      </div>
+
+      {% for s in services %}
+      <div class="service-card">
+        <span class="service-status">COMING SOON</span>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>© {{ doctor.institute }} · HemaVision V-01 · AI Diagnostic Platform</span>
+  </footer>
+</body>
+</html>

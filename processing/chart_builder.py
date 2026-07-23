@@ -63,58 +63,56 @@ def build_vega_lite_spec(combined_df: pd.DataFrame) -> dict:
 
     spec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "title": "Combined Results — Tube 001 & Tube 002",
-        "background": "transparent",
-        "config": {
-            "axis": {"labelColor": "#8b93a3", "titleColor": "#e7ebf2", "gridColor": "#232a37"},
-            "legend": {"labelColor": "#e7ebf2", "titleColor": "#e7ebf2"},
-            "title": {"color": "#e7ebf2", "fontSize": 14, "font": "Inter"},
-            "view": {"stroke": "transparent"}
-        },
+        "title": "Combined Results of Tube 01 and Tube 02",
+        "width": "container",
+        "background": "white",
         "layer": [
             {
                 "data": {"values": base_values},
-                "mark": {"type": "bar", "cornerRadiusTopLeft": 3, "cornerRadiusTopRight": 3},
+                "mark": "bar",
                 "encoding": {
-                    "x": {"field": "Marker", "type": "nominal", "sort": "-y", "title": None,
+                    "x": {"field": "Marker", "type": "nominal", "sort": "-y", "title": "Marker",
                           "axis": {"labelAngle": -35}},
-                    "y": {"field": "Sum Percent", "type": "quantitative", "title": "Sum Percent (%)"},
+                    "y": {"field": "Sum Percent", "type": "quantitative", "title": "Sum Percent"},
+                    "color": {"field": "Tube", "type": "nominal", "legend": {"title": "Tube"}},
+                    "tooltip": [
+                        {"field": "Tube", "type": "nominal"},
+                        {"field": "Marker", "type": "nominal"},
+                        {"field": "Sum Percent", "type": "quantitative"}
+                    ]
+                }
+            },
+            {
+                "data": {"values": highlight_values},
+                "mark": {"type": "bar", "strokeWidth": 2},
+                "encoding": {
+                    "x": {"field": "Marker", "type": "nominal", "sort": "-y"},
+                    "y": {"field": "Sum Percent", "type": "quantitative"},
                     "color": {
-                        "field": "Tube", "type": "nominal",
-                        "scale": {"range": ["#5eead4", "#38bdf8"]},
-                        "legend": {"title": "Tube"}
+                        "datum": "Result",
+                        "scale": {"domain": ["Result"], "range": ["red"]},
+                        "legend": {"title": "Result"}
                     },
+                    "stroke": {"value": "red"},
                     "tooltip": [
                         {"field": "Tube", "type": "nominal"},
                         {"field": "Marker", "type": "nominal"},
-                        {"field": "Sum Percent", "type": "quantitative", "format": ".2f"}
+                        {"field": "Sum Percent", "type": "quantitative"}
                     ]
                 }
             },
             {
                 "data": {"values": highlight_values},
-                "mark": {"type": "bar", "stroke": "#f87171", "strokeWidth": 2, "fillOpacity": 0},
+                "mark": {"type": "text", "align": "left", "baseline": "bottom", "dx": 5, "dy": -2, "fontWeight": "bold"},
                 "encoding": {
                     "x": {"field": "Marker", "type": "nominal", "sort": "-y"},
-                    "y": {"field": "Sum Percent", "type": "quantitative"},
-                    "tooltip": [
-                        {"field": "Tube", "type": "nominal"},
-                        {"field": "Marker", "type": "nominal"},
-                        {"field": "Sum Percent", "type": "quantitative", "format": ".2f"}
-                    ]
-                }
-            },
-            {
-                "data": {"values": highlight_values},
-                "mark": {"type": "text", "align": "left", "baseline": "bottom", "dx": 5, "dy": -4,
-                         "fontWeight": "bold", "color": "#f87171"},
-                "encoding": {
-                    "x": {"field": "Marker", "type": "nominal", "sort": "-y"},
-                    "y": {"field": "Sum Percent", "type": "quantitative"},
-                    "text": {"field": "Bar_Label", "type": "nominal"}
+                    "y": {"field": "Sum Percent", "type": "quantitative", "stack": "zero"},
+                    "text": {"field": "Bar_Label", "type": "nominal"},
+                    "color": {"value": "red"}
                 }
             }
-        ]
+        ],
+        "resolve": {"scale": {"color": "independent"}}
     }
 
     return spec
