@@ -27,7 +27,11 @@ def extract_statistics_table(pdf_path: str) -> pd.DataFrame:
         raise PDFExtractionError(f"Unable to read PDF: {exc}") from exc
 
     if "Statistics" not in text:
-        raise PDFExtractionError("Statistics section not found in report.")
+        raise PDFExtractionError(
+            "Statistics section not found in report. "
+            "সঠিক ফাইল কিনা চেক করুন — এটা raw flow cytometry ল্যাব রিপোর্ট হতে হবে, "
+            "প্রজেক্ট রাইটআপ বা প্রসেসড রিপোর্ট না।"
+        )
 
     stats_section = text.split("Statistics")[-1]
     rows = []

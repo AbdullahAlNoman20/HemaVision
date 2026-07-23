@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/5.30.0/vega.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/5.20.1/vega-lite.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/6.26.0/vega-embed.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
 </head>
 <body>
 
@@ -176,7 +176,8 @@
 
 <script>
   const chartSpec = {{ chart_spec | safe }};
-  vegaEmbed('#markerChart', chartSpec, { actions: false, renderer: 'svg' });
+  vegaEmbed('#markerChart', chartSpec, { actions: false, renderer: 'svg' })
+    .catch(err => console.error('vegaEmbed render failed:', err));
 </script>
 
 </body>

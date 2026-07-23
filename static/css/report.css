@@ -108,6 +108,9 @@ body {
 .table-panel { width: 44%; border: 2px solid #2e6da4; border-radius: 6px; overflow: hidden; background: #f9fcff; }
 .chart-panel { width: 56%; border: 2px solid #27ae60; border-radius: 6px; overflow: hidden; background: #f4faff; }
 
+#markerChart { width: 100%; min-height: 260px; }
+#markerChart .vega-embed { width: 100% !important; }
+
 .panel-header { color: white; padding: 6px 12px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; }
 .panel-header-blue { background: #1a3a5c; }
 .panel-header-green { background: #145a32; }

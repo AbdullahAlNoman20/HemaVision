@@ -3,6 +3,7 @@ import os
 import uuid
 import json
 import logging
+import pandas as pd
 from datetime import datetime
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_wtf import FlaskForm
@@ -38,7 +39,7 @@ DOCTOR_PROFILE = {
     "designation": "Associate Professor, Pediatric Hematology & Oncology",
     "institute": "Bangladesh Medical University",
     "location": "Shahbagh, Dhaka-1000, Bangladesh",
-    "photo": "img/dr-momena-begum.jpg",
+    "photo": "/img/dr-momena-begum.png",
     "expertise": [
         "Pediatric Leukaemia Diagnosis",
         "Flow Cytometry Immunophenotyping",
@@ -116,7 +117,7 @@ def process():
             tube_label="Tube 002",
         )
 
-        combined_df = tube1._append(tube2, ignore_index=True) if hasattr(tube1, "_append") else tube1.append(tube2, ignore_index=True)
+        combined_df = pd.concat([tube1, tube2], ignore_index=True)
         interpretation = interpret_results(combined_df)
         chart_spec = build_vega_lite_spec(combined_df)
 
@@ -142,9 +143,9 @@ def process():
         flash("PDF থেকে ডেটা এক্সট্রাক্ট করা যায়নি। ফাইল ফরম্যাট চেক করুন।")
         return redirect(url_for("analyze"))
 
-    except Exception:
+    except Exception as e:
         logger.exception("Unexpected error while processing report")
-        flash("প্রসেসিং এর সময় একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।")
+        flash(f"প্রসেসিং এর সময় একটি সমস্যা হয়েছে: {type(e).__name__}: {e}")
         return redirect(url_for("analyze"))
 
     finally:
@@ -159,4 +160,5 @@ def file_too_large(e):
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="127.0.0.1", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
