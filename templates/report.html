@@ -1,0 +1,184 @@
+<!-- templates/report.html -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HemaVision Report — {{ report_id }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+</head>
+<body>
+
+<div id="rpt">
+
+  <div class="rpt-header">
+    <div class="dna-line dna-left"></div>
+    <div class="dna-line dna-right"></div>
+
+    <div class="logo-badge">HemaVision ML · V-01</div>
+
+    <div class="dept-line dept-red">Department of Pediatric Hematology and Oncology</div>
+    <div class="dept-line dept-black">বাংলাদেশ মেডিকেল বিশ্ববিদ্যালয়</div>
+    <div class="dept-line dept-green">Bangladesh Medical University</div>
+    <div class="dept-address">{{ doctor.location }}</div>
+
+    <div class="report-type-badge-wrap">
+      <span class="report-type-badge">⬡ FLOWCYTOMETRY REPORT</span>
+    </div>
+  </div>
+
+  <div class="rpt-body">
+
+    <div class="meta-row">
+      <div class="meta-block meta-id">
+        <div class="meta-label">REPORT ID</div>
+        <div class="meta-value">{{ report_id }}</div>
+      </div>
+      <div class="meta-block meta-date">
+        <div class="meta-label meta-label-blue">DATE</div>
+        <div class="meta-value meta-value-blue">{{ report_date }}</div>
+      </div>
+      <div class="meta-block meta-physician">
+        <div class="meta-label meta-label-green">PHYSICIAN</div>
+        <div class="meta-value meta-value-green">{{ doctor.name }}</div>
+        <div class="meta-sub">{{ doctor.designation }}</div>
+      </div>
+    </div>
+
+    <div class="patient-box">
+      <div class="patient-header">PATIENT INFORMATION</div>
+      <div class="patient-fields">
+        <div class="field-group field-name">
+          <div class="field-label field-label-purple">PATIENT NAME</div>
+          <input class="hv-field field-purple" type="text" maxlength="120" autocomplete="off">
+        </div>
+        <div class="field-group field-parent">
+          <div class="field-label field-label-red">PARENT / GUARDIAN NAME</div>
+          <input class="hv-field field-red" type="text" maxlength="120" autocomplete="off">
+        </div>
+        <div class="field-group field-age">
+          <div class="field-label field-label-green">AGE</div>
+          <input class="hv-field field-green" type="text" maxlength="10" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-row">
+      <div class="table-panel">
+        <div class="panel-header panel-header-blue">MARKER SUMMARY TABLE</div>
+        <div class="panel-body">
+          <table class="marker-table">
+            <thead>
+              <tr><th>MARKER</th><th>% EXPRESSION</th></tr>
+            </thead>
+            <tbody>
+              {% for m in markers %}
+              <tr class="{{ 'row-blue' if loop.index0 % 2 == 0 else 'row-green' }}">
+                <td>{{ m["Marker"] }}</td>
+                <td class="td-center">{{ "%.2f"|format(m["Sum Percent"]) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="chart-panel">
+        <div class="panel-header panel-header-green">EXPRESSION CHART</div>
+        <div class="panel-body">
+          <div id="markerChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="interpretation-block">
+      <div class="panel-header panel-header-red">FINAL INTERPRETATION & DIAGNOSIS</div>
+      <div class="interpretation-body">{{ interpretation }}</div>
+    </div>
+
+    <div class="rx-section">
+      <div class="panel-header panel-header-purple">DOCTOR'S NOTES / RECOMMENDATIONS FOR PATIENT</div>
+      <div class="rx-body">
+        <div class="rx-top">
+          <div class="rx-symbol">℞</div>
+          <div class="rx-patient-strip">
+            <div class="rx-field">
+              <div class="rx-label">PATIENT NAME</div>
+              <div class="rx-line-short"></div>
+            </div>
+            <div class="rx-field">
+              <div class="rx-label">AGE / SEX</div>
+              <div class="rx-line-short"></div>
+            </div>
+            <div class="rx-field">
+              <div class="rx-label">DATE</div>
+              <div class="rx-date">{{ report_date }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rx-lines">
+          <div class="rx-line"></div>
+          <div class="rx-line"></div>
+          <div class="rx-line"></div>
+        </div>
+
+        <div class="rx-footer">
+          <span>HemaVision V-01 &nbsp;·&nbsp; BMU Pediatric Hematology</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer-box">
+      <div class="disclaimer-title">⚠ Disclaimer</div>
+      This report is generated by an automated machine learning system trained on clinical flow cytometry data.
+      Results are intended to assist qualified medical professionals and do not constitute a definitive clinical diagnosis.
+      All interpretations must be reviewed and validated by a licensed hematologist or oncologist before any clinical decision is made.
+      The system may produce errors in cases involving atypical marker expression, data quality issues, or rare leukemia subtypes.
+      <div class="disclaimer-footer">
+        <span class="dc-purple">HemaVision – V-01</span> &nbsp;·&nbsp;
+        Developed by: <span class="dc-blue">Abdullah Al Noman</span> &amp; <span class="dc-blue">Nushrat Jahan Mila</span>
+        &nbsp;·&nbsp; AI/ML Engineer &nbsp;·&nbsp; DIU-CSE
+      </div>
+    </div>
+
+    <div class="signature-row">
+      <div class="signature-block">
+        <div class="signature-space"></div>
+        <div class="signature-line"></div>
+        <div class="signature-name">{{ doctor.name }}</div>
+        <div class="signature-desig">{{ doctor.designation }}</div>
+        <div class="signature-inst">{{ doctor.institute }}</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="rpt-footer">
+    <span>BMU · DHAKA-1000, BANGLADESH</span>
+    <span class="footer-mid">HemaVision V-01</span>
+    <span>ML-IMMUNOPHENOTYPING · DIU-CSE</span>
+  </div>
+
+</div>
+
+<div class="no-print print-btn-wrap">
+  <button onclick="window.print()">🖨 PRINT REPORT</button>
+</div>
+<div class="no-print print-btn-wrap">
+  <a href="{{ url_for('analyze') }}" class="link-back">← New Upload</a>
+</div>
+
+<script>
+  const chartSpec = {{ chart_spec | safe }};
+  vegaEmbed('#markerChart', chartSpec, { actions: false, renderer: 'svg' })
+    .catch(err => console.error('vegaEmbed render failed:', err));
+</script>
+
+</body>
+</html>
